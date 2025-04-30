@@ -1,0 +1,863 @@
+openapi: 3.0.0
+info:
+  title: Go Fit API
+  version: 1.0.0
+  description: Comprehensive API documentation for the Go Fit App, providing access to features such as user management, class bookings, orders, and more. This API is designed to support both trainers and clients, enabling seamless interactions with the platform's services.
+
+servers:
+  - url: http://localhost:9876
+    description: Server
+
+paths:
+  /:
+    get:
+      tags:
+        - Homes
+      summary: Backend server welcome message
+      responses:
+        "200":
+          description: Welcome message
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Backend Side of Go Fit!
+
+  # /auth/google:
+  #   get:
+  #     summary: Initiate Google OAuth login
+  #     responses:
+  #       "302":
+  #         description: Redirects to Google for authentication
+
+  # /auth/google/callback:
+  #   get:
+  #     summary: Google OAuth callback endpoint
+  #     responses:
+  #       "302":
+  #         description: Redirects after successful or failed login
+
+  /user/:
+    get:
+      tags:
+        - User
+      summary: Get user home page
+      responses:
+        "200":
+          description: Success message
+
+  /user/all:
+    get:
+      tags:
+        - User
+      summary: Get all users with role "client"
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        password:
+                          type: string
+                        phone:
+                          type: number
+                        country:
+                          type: string
+                        sex:
+                          type: string
+                        role:
+                          type: string
+                          enum: [trainer, client]
+                        age:
+                          type: number
+                        height:
+                          type: number
+                        weight:
+                          type: number
+                        healthProblem:
+                          type: array
+                          items:
+                            type: string
+                        classes:
+                          type: array
+                          items:
+                            type: string
+                        createdDate:
+                          type: string
+                        createdTime:
+                          type: string
+        "400":
+          description: Error occurred
+
+  /alltrainer:
+    get:
+      tags:
+        - User
+      summary: Get all trainers
+      responses:
+        "200":
+          description: Successfully fetched all trainers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User Data Fetched
+                  trainers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+        "400":
+          description: Failed to fetch trainers
+
+  /user/singletrainer/{id}:
+    get:
+      tags:
+        - User
+      summary: Get a single trainer by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Trainer data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  trainer:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      password:
+                        type: string
+                      phone:
+                        type: number
+                      country:
+                        type: string
+                      sex:
+                        type: string
+                      role:
+                        type: string
+                        enum: [trainer, client]
+                      age:
+                        type: number
+                      height:
+                        type: number
+                      weight:
+                        type: number
+                      healthProblem:
+                        type: array
+                        items:
+                          type: string
+                      classes:
+                        type: array
+                        items:
+                          type: string
+                      createdDate:
+                        type: string
+                      createdTime:
+                        type: string
+        "400":
+          description: Error occurred
+
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User data fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      password:
+                        type: string
+                      phone:
+                        type: number
+                      country:
+                        type: string
+                      sex:
+                        type: string
+                      role:
+                        type: string
+                        enum: [trainer, client]
+                      age:
+                        type: number
+                      height:
+                        type: number
+                      weight:
+                        type: number
+                      healthProblem:
+                        type: array
+                        items:
+                          type: string
+                      classes:
+                        type: array
+                        items:
+                          type: string
+                      createdDate:
+                        type: string
+                      createdTime:
+                        type: string
+        "400":
+          description: Error occurred
+
+  /user/register:
+    post:
+      tags:
+        - User
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: number
+                country:
+                  type: string
+                sex:
+                  type: string
+                role:
+                  type: string
+                  enum: [trainer, client]
+                age:
+                  type: number
+                height:
+                  type: number
+                weight:
+                  type: number
+                healthProblem:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: User registered
+        "400":
+          description: User already exists or other error
+        "401":
+          description: Server error
+
+  /user/login:
+    post:
+      tags:
+        - User
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: User not found
+        "401":
+          description: Incorrect password
+
+  /user/update/{id}:
+    patch:
+      tags:
+        - User
+      summary: Update user data
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: number
+                country:
+                  type: string
+                sex:
+                  type: string
+                role:
+                  type: string
+                  enum: [trainer, client]
+                age:
+                  type: number
+                height:
+                  type: number
+                weight:
+                  type: number
+                healthProblem:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: User updated
+        "400":
+          description: Error occurred
+
+  /user/delete/{id}:
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User deleted
+        "400":
+          description: Error occurred
+
+  /admin/:
+    get:
+      tags:
+        - Admin
+      summary: Admin base route
+      responses:
+        "200":
+          description: Admin Page message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Admin Page
+
+  /admin/signin:
+    post:
+      tags:
+        - Admin
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login status message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login Successful
+
+  /admin/signup:
+    post:
+      tags:
+        - Admin
+      summary: Admin signup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Admin registered successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Admin Signup Successful
+
+  /admin/all:
+    get:
+      tags:
+        - Admin
+      summary: Get all dashboard data
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Dashboard Done
+                  trainersRegistered:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        role:
+                          type: string
+                  usersRegistered:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        role:
+                          type: string
+                  classesRegistered:
+                    type: array
+                    items:
+                      type: object
+                  ordersCompleted:
+                    type: array
+                    items:
+                      type: object
+                  totalUsers:
+                    type: integer
+                  totalClasses:
+                    type: integer
+                  totalOrders:
+                    type: integer
+                  totalTrainers:
+                    type: integer
+        "500":
+          description: Server error
+
+  /class/:
+    get:
+      tags:
+        - FitnessClasses
+      summary: Class base route
+      responses:
+        "200":
+          description: Class Page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: classes Page
+
+  /class/all:
+    get:
+      tags:
+        - FitnessClasses
+      summary: Get all classes
+      responses:
+        "200":
+          description: List of all classes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  classes:
+                    type: array
+                    items:
+                      type: object
+
+  /class/searchByUserID/{id}:
+    get:
+      tags:
+        - FitnessClasses
+      summary: Get classes by user ID (as a client)
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: User ID
+      responses:
+        "200":
+          description: Classes filtered by user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  classes:
+                    type: array
+                    items:
+                      type: object
+
+  /class/searchByTrainerID/{id}:
+    get:
+      tags:
+        - FitnessClasses
+      summary: Get classes by trainer ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Trainer ID
+      responses:
+        "200":
+          description: Classes filtered by trainer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  classes:
+                    type: array
+                    items:
+                      type: object
+
+  /class/{id}:
+    get:
+      tags:
+        - FitnessClasses
+      summary: Get class by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Single class detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  classes:
+                    type: object
+
+  /class/create:
+    post:
+      tags:
+        - FitnessClasses
+      summary: Create a new class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                className: "Yoga Session"
+                description: "Morning yoga class"
+                userID: "trainer123"
+                username: "John Doe"
+                venue: "online"
+                duration: 60
+                seatCapacity: 20
+      responses:
+        "200":
+          description: Class created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  classes:
+                    type: object
+
+  /class/update/{id}:
+    patch:
+      tags:
+        - FitnessClasses
+      summary: Update class by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                description: "Updated description"
+                duration: 75
+      responses:
+        "200":
+          description: Class updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: class data updated
+
+  /class/delete/{id}:
+    delete:
+      tags:
+        - FitnessClasses
+      summary: Delete class by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Class deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: class data deleted
+
+  /class/updateTest:
+    patch:
+      tags:
+        - FitnessClasses
+      summary: Update class Zoom links where venue is "online"
+      responses:
+        "200":
+          description: Zoom links updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: class data updated
+  paths:
+  /order:
+    get:
+      tags:
+        - Booking
+      summary: Order page
+      responses:
+        200:
+          description: Orders page loaded
+
+  /order/all:
+    get:
+      tags:
+        - Booking
+      summary: Get all orders
+      responses:
+        200:
+          description: Orders fetched successfully
+        400:
+          description: Error occurred
+
+  /order/{id}:
+    get:
+      tags:
+        - Booking
+      summary: Get a single order by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Order ID
+      responses:
+        200:
+          description: Order fetched
+        400:
+          description: Error occurred
+
+  /order/user/{id}:
+    get:
+      tags:
+        - Booking
+      summary: Get all orders of a user by user ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        200:
+          description: Orders fetched
+        400:
+          description: Error occurred
+
+  /order/checkAvailablity:
+    post:
+      tags:
+        - Booking
+      summary: Check seat availability for a class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                classID:
+                  type: string
+                userID:
+                  type: string
+      responses:
+        200:
+          description: Slot available
+        401:
+          description: Already registered or seats booked
+        400:
+          description: Error occurred
+
+  /order/create:
+    post:
+      tags:
+        - Booking
+      summary: Create an order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price:
+                  type: number
+                classID:
+                  type: string
+                userID:
+                  type: string
+                selectedDate_Time:
+                  type: string
+      responses:
+        200:
+          description: Order created successfully
+        400:
+          description: Error occurred
+
+  /order/update/{id}:
+    patch:
+      tags:
+        - Booking
+      summary: Update order status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Order ID
+      responses:
+        200:
+          description: Order status updated
+        400:
+          description: Error occurred
