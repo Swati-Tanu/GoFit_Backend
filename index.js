@@ -17,7 +17,6 @@ require("dotenv").config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-// const {passport} = require("./google.outh");
 
 app.use(cors({ origin: "*" }));
 
@@ -42,12 +41,6 @@ app.use("/user", userRouter);
 app.use("/class", classesRouter);
 app.use("/order", ordersRouter);
 app.use("/admin", dashboardRouter);
-
-// app.get('/auth/google',passport.authenticate('google', { scope: ['profile','email'] }));
-
-// app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' ,session:false}),function(req, res) {
-//     res.redirect("www.google.com")
-//   });
 
 app.listen(process.env.port, async () => {
   try {
