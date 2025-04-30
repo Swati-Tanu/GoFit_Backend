@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const { connection } = require("./config/mongo_DB");
 const { userRouter } = require("./routes/userRouter");
 const { classesRouter } = require("./routes/classesRouter");
@@ -56,7 +57,22 @@ app.get(
     session: false,
   }),
   function (req, res) {
-    res.redirect("https://gofitwebsite.netlify.app/userDashboard.html");
+    try {
+      // Create a JWT token
+      const token = jwt.sign(
+        { userId: req.user._id, email: req.user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" } // Token expiration
+      );
+
+      // Redirect to the frontend with the token as a query parameter
+      res.redirect(
+        `https://gofitwebsite.netlify.app/userDashboard.html?token=${token}`
+      );
+    } catch (error) {
+      console.error("Error generating token:", error.message);
+      res.redirect("/login"); // Redirect to login if token generation fails
+    }
   }
 );
 

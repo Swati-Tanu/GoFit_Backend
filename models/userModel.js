@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema(
     },
 
     phone: Number,
-    country: String, // Not required for Google login
+    country: String, 
     sex: String,
     role: { type: String, enum: ["trainer", "client"], default: "client" },
     age: Number,
