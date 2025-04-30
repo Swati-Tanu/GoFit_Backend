@@ -56,7 +56,7 @@ app.get(
     session: false,
   }),
   function (req, res) {
-    res.redirect("https://gofitwebsite.netlify.app/");
+    res.redirect("https://gofitwebsite.netlify.app/userDashboard.html");
   }
 );
 
