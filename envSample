@@ -1,0 +1,10 @@
+port=
+EMAIL_ADDRESS=
+EMAIL_PASSWORD=
+mongourl=
+secretKey=
+refreshSecretKey=
+salt=
+redis_host=
+redis_port=
+redis_pass=

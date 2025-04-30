@@ -5,7 +5,7 @@ info:
   description: Comprehensive API documentation for the Go Fit App, providing access to features such as user management, class bookings, orders, and more. This API is designed to support both trainers and clients, enabling seamless interactions with the platform's services.
 
 servers:
-  - url: http://localhost:9876
+  - url: https://gofit-api.onrender.com
     description: Server
 
 paths:
