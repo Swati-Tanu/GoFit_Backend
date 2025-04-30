@@ -13,7 +13,7 @@ paths:
     get:
       tags:
         - Homes
-      summary: Backend server welcome message
+      summary: Backend server Welcome Message
       responses:
         "200":
           description: Welcome message
