@@ -8,3 +8,5 @@ salt=
 redis_host=
 redis_port=
 redis_pass=
+clientID=
+clientSecret=
