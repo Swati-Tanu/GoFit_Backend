@@ -77,7 +77,7 @@ npm start
 
 [SWAGGER UI](https://gofit-api.onrender.com/api-docs/)
 
-[Postman Collection]()
+[Postman Collection](https://github.com/user-attachments/files/20008426/Go.Fit.postman_collection.json)
 
 
 
